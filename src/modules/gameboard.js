@@ -52,13 +52,13 @@ export default function GameBoard() {
     const { colValid, rowValid } = validatePlacement(row, col, ship.length);
 
     if (orientation === "horizontal") {
-      //if (!colValid) return false;
+      // if (!colValid) return false;
       placeShipHorizontal(row, col, ship);
       return true;
     }
 
     if (orientation === "vertical") {
-      //if (!rowValid) return false;
+      // if (!rowValid) return false;
       placeShipVertical(row, col, ship);
       return true;
     }
