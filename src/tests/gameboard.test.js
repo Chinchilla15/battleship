@@ -18,7 +18,7 @@ describe("Initialize Board", () => {
 describe("placeShip functionality", () => {
   let gameBoard;
 
-  beforeAll(() => {
+  beforeEach(() => {
     gameBoard = GameBoard();
     gameBoard.initializeBoard();
   });
@@ -42,6 +42,10 @@ describe("placeShip functionality", () => {
   });
 
   test("should not place a ship outside of the board", () => {
-    const result = gameBoard.placeShip(0, 8, 4, "horizontal");
+    expect(() => {
+      gameBoard.placeShip(0, 8, 4, "horizontal");
+    }).toThrow(
+      "Invalid placement: either out of bounds or overlapping with another ship.",
+    );
   });
 });

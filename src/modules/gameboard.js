@@ -12,56 +12,51 @@ export default function GameBoard() {
     }
   }
 
-  function validatePlacement(row, col, length) {
-    const colValidation = () => {
-      if (col + length < 10) return false;
+  function validatePlacement(row, col, length, orientation) {
+    if (orientation === "horizontal") {
+      if (col + length > 10) return false;
       for (let i = col; i < col + length; i++) {
         if (board[row][i] !== null) return false;
       }
-      return true;
-    };
-
-    const rowValidation = () => {
-      if (row + length < 10) return false;
+    } else if (orientation === "vertical") {
+      if (row + length > 10) return false;
       for (let i = row; i < row + length; i++) {
         if (board[i][col] !== null) return false;
       }
-      return true;
-    };
-
-    return { colValid: colValidation(), rowValid: rowValidation() };
+    }
+    return true;
   }
 
   function placeShipHorizontal(row, col, ship) {
     for (let i = col; i < col + ship.length; i++) {
       board[row][i] = ship;
     }
-    return true;
+    //return true;
   }
 
   function placeShipVertical(row, col, ship) {
     for (let i = row; i < row + ship.length; i++) {
       board[i][col] = ship;
     }
-    return true;
+    //return true;
   }
 
   function placeShip(row, col, length, orientation) {
     const ship = new Ship(length);
 
-    const { colValid, rowValid } = validatePlacement(row, col, ship.length);
+    if (!validatePlacement(row, col, length, orientation)) {
+      throw new Error(
+        "Invalid placement: either out of bounds or overlapping with another ship.",
+      );
+    }
 
     if (orientation === "horizontal") {
-      // if (!colValid) return false;
       placeShipHorizontal(row, col, ship);
-      return true;
+      //return true;
+    } else if (orientation === "vertical") {
+      placeShipVertical(row, col, ship);
     }
 
-    if (orientation === "vertical") {
-      // if (!rowValid) return false;
-      placeShipVertical(row, col, ship);
-      return true;
-    }
     return false;
   }
 
