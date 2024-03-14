@@ -18,10 +18,13 @@
   },
   "overrides": [
     {
-      "files": ["webpack.config.js"],
+      "files": ["webpack.config.js", "tests/**/*", "main.js"],
+      "plugins": ["jest"],
       "env": {
-        "node": true
+        "node": true,
+        "jest/globals": true
       }
     }
-  ]
+  ],
+  "ignorePatterns": ["webpack.config.js", "main.js"]
 }
