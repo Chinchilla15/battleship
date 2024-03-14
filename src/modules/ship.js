@@ -1,5 +1,9 @@
 /* eslint-disable no-param-reassign */
+<<<<<<< HEAD
 function Ship(length) {
+=======
+function ship(length) {
+>>>>>>> ship_module_logic
   this.length = length;
   this.hits = 0;
   this.sunk = false;
@@ -26,4 +30,8 @@ function Ship(length) {
   };
 }
 
+<<<<<<< HEAD
 export default Ship;
+=======
+module.exports = ship;
+>>>>>>> ship_module_logic
