@@ -13,14 +13,15 @@
     "no-console": "off",
     "semi": ["error", "always"],
     "quotes": ["error", "double"],
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-plusplus": "off"
   },
   "overrides": [
     {
-        "files": ["webpack.config.js"],
-        "env": {
-            "node": true
-        }
+      "files": ["webpack.config.js"],
+      "env": {
+        "node": true
+      }
     }
-]
+  ]
 }
