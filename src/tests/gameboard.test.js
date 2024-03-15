@@ -32,7 +32,7 @@ describe("placeShip functionality", () => {
     }
   });
 
-  test("should place a ship vertically on the board", () => {
+  test("Should place a ship vertically on the board", () => {
     const length = 4;
     gameBoard.placeShip(0, 0, length, "vertical");
     const board = gameBoard.getBoard();
@@ -48,4 +48,25 @@ describe("placeShip functionality", () => {
       "Invalid placement: either out of bounds or overlapping with another ship.",
     );
   });
+});
+
+test("Verify all ships are added on the board when placed randomly", () => {
+  let gameBoard = GameBoard();
+
+  gameBoard.placeShipRandom();
+  const board = gameBoard.getBoard();
+
+  // Total length of all ships expected to be placed
+  const totalShipLength = [1, 1, 2, 3, 3, 4, 5].reduce((a, b) => a + b, 0);
+
+  // Calculate total ship segments present on the board
+  let actualShipSegments = 0;
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      if (board[row][col] !== null) actualShipSegments++;
+    }
+  }
+
+  // Verify the total number of ship segments matches the expected total
+  expect(actualShipSegments).toBe(totalShipLength);
 });

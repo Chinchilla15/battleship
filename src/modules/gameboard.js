@@ -60,7 +60,25 @@ export default function GameBoard() {
     return false;
   }
 
-  function placeShipRandom() {}
+  function placeShipRandom() {
+    const shipLengths = [1, 1, 2, 3, 3, 4, 5];
+    initializeBoard();
+
+    shipLengths.forEach((length) => {
+      let placed = false;
+
+      while (!placed) {
+        const row = Math.floor(Math.random() * 10);
+        const col = Math.floor(Math.random() * 10);
+        const orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
+
+        if (validatePlacement(row, col, length, orientation)) {
+          placeShip(row, col, length, orientation);
+          placed = true;
+        }
+      }
+    });
+  }
 
   function receiveAttack(x, y) {
     /*
@@ -83,5 +101,12 @@ export default function GameBoard() {
   function clearBoard() {}
 
   // Return public methods and properties
-  return { initializeBoard, placeShip, receiveAttack, getBoard, allShipsSunk };
+  return {
+    initializeBoard,
+    placeShip,
+    receiveAttack,
+    getBoard,
+    allShipsSunk,
+    placeShipRandom,
+  };
 }
