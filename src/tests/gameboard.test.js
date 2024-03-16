@@ -70,3 +70,40 @@ test("Verify all ships are added on the board when placed randomly", () => {
   // Verify the total number of ship segments matches the expected total
   expect(actualShipSegments).toBe(totalShipLength);
 });
+
+describe("receiveAttack() Functionality", () => {
+  let gameBoard = GameBoard();
+
+  beforeEach(() => {
+    gameBoard.initializeBoard();
+    gameBoard.placeShip(0, 0, 3, "vertical");
+  });
+
+  test("Ship gets a hit and the counter hit counter is updated", () => {
+    let ship = gameBoard.getBoard()[0][0];
+    expect(ship.hits).toBe(0);
+
+    gameBoard.receiveAttack(0, 0);
+
+    expect(ship.hits).toBe(1);
+  });
+
+  test("Gameboard keeps track of missed shots", () => {
+    gameBoard.receiveAttack(0, 1);
+    let missedShot = gameBoard.getBoard()[0][1];
+
+    expect(gameBoard.missedShots.length).toBe(1);
+    expect(missedShot).not.toBeNull();
+  });
+
+  test("Ship updates sunk property after receiveing the 3 hits", () => {
+    let ship = gameBoard.getBoard()[0][0];
+
+    gameBoard.receiveAttack(0, 0);
+    gameBoard.receiveAttack(1, 0);
+    gameBoard.receiveAttack(2, 0);
+
+    expect(ship.hits).toBe(3);
+    expect(ship.sunk).toBeTruthy();
+  });
+});

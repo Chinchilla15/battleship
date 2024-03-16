@@ -2,6 +2,7 @@ import Ship from "./ship";
 
 export default function GameBoard() {
   const board = [];
+  const missedShots = [];
 
   function initializeBoard() {
     for (let i = 0; i < 10; i++) {
@@ -80,19 +81,19 @@ export default function GameBoard() {
     });
   }
 
-  function receiveAttack(x, y) {
-    /*
-    const target = board[y][x];
-    if (target) {
-      target.ship.hit();
-      target.ship.hits.push({ x, y });
-      console.log(`Hit at ${x}, ${y}`);
+  function receiveAttack(row, col) {
+    const target = board[row][col];
+
+    if (target !== null) {
+      target.hit();
+      return true;
     } else {
-      board[y][x] = "miss";
-      console.log(`Miss at ${x}, ${y}`);
+      board[row][col] = ""; //Update this once the UI is ready
+      missedShots.push({ row, col });
+      return false;
     }
-    */
   }
+  //console.log(missedShots);
 
   const getBoard = () => board;
 
@@ -100,7 +101,6 @@ export default function GameBoard() {
 
   function clearBoard() {}
 
-  // Return public methods and properties
   return {
     initializeBoard,
     placeShip,
@@ -108,5 +108,6 @@ export default function GameBoard() {
     getBoard,
     allShipsSunk,
     placeShipRandom,
+    missedShots,
   };
 }
