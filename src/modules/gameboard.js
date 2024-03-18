@@ -97,9 +97,29 @@ export default function GameBoard() {
 
   const getBoard = () => board;
 
-  function allShipsSunk() {}
+  function allShipsSunk() {
+    const board = getBoard();
+    const shipLengths = [1, 1, 2, 3, 3, 4, 5];
 
-  function clearBoard() {}
+    // Initialize an object to track the sunk status of each ship length
+    const sunkShips = Object.fromEntries(
+      shipLengths.map((length) => [length, true]),
+    );
+
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        const cell = board[i][j];
+        if (cell !== null && !cell.sunk) {
+          // If the cell contains a ship that is not sunk,
+          // mark the corresponding ship length as not sunk
+          sunkShips[cell.length] = false;
+        }
+      }
+    }
+
+    // Check if all ships of each length are sunk
+    return Object.values(sunkShips).every((sunk) => sunk);
+  }
 
   return {
     initializeBoard,

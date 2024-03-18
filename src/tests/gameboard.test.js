@@ -107,3 +107,70 @@ describe("receiveAttack() Functionality", () => {
     expect(ship.sunk).toBeTruthy();
   });
 });
+
+describe("allShipsSunk() Functionality", () => {
+  const gameBoard = GameBoard();
+  beforeEach(() => {
+    gameBoard.initializeBoard();
+  });
+
+  test("All ships are sunk", () => {
+    // Place all ships and receive attacks on each ship until they are all sunk
+    gameBoard.placeShip(4, 4, 1, "vertical");
+    gameBoard.placeShip(8, 8, 1, "vertical");
+    gameBoard.placeShip(6, 1, 2, "horizontal");
+    gameBoard.placeShip(0, 0, 3, "vertical");
+    gameBoard.placeShip(0, 9, 3, "vertical");
+    gameBoard.placeShip(5, 5, 4, "horizontal");
+    gameBoard.placeShip(8, 1, 5, "horizontal");
+    gameBoard.receiveAttack(0, 0);
+    gameBoard.receiveAttack(1, 0);
+    gameBoard.receiveAttack(2, 0);
+    gameBoard.receiveAttack(0, 9);
+    gameBoard.receiveAttack(1, 9);
+    gameBoard.receiveAttack(2, 9);
+    gameBoard.receiveAttack(4, 4);
+    gameBoard.receiveAttack(8, 8);
+    gameBoard.receiveAttack(5, 5);
+    gameBoard.receiveAttack(5, 6);
+    gameBoard.receiveAttack(5, 7);
+    gameBoard.receiveAttack(5, 8);
+    gameBoard.receiveAttack(6, 1);
+    gameBoard.receiveAttack(6, 2);
+    gameBoard.receiveAttack(8, 1);
+    gameBoard.receiveAttack(8, 2);
+    gameBoard.receiveAttack(8, 3);
+    gameBoard.receiveAttack(8, 4);
+    gameBoard.receiveAttack(8, 5);
+
+    expect(gameBoard.allShipsSunk()).toBeTruthy();
+  });
+
+  test("Some ships are sunk", () => {
+    // Place some ships and receive attacks only on part of them
+    gameBoard.placeShip(0, 0, 1, "vertical");
+    gameBoard.placeShip(0, 1, 1, "vertical");
+    gameBoard.placeShip(0, 2, 2, "vertical");
+    gameBoard.placeShip(0, 3, 3, "vertical");
+    gameBoard.placeShip(0, 4, 3, "vertical");
+    gameBoard.receiveAttack(0, 0);
+    gameBoard.receiveAttack(0, 1);
+    gameBoard.receiveAttack(0, 2);
+    gameBoard.receiveAttack(1, 2);
+
+    expect(gameBoard.allShipsSunk()).toBeFalsy();
+  });
+
+  test("No ships are sunk", () => {
+    // No attacks were received
+    gameBoard.placeShip(0, 0, 1, "vertical");
+    gameBoard.placeShip(0, 1, 1, "vertical");
+    gameBoard.placeShip(0, 2, 2, "vertical");
+    gameBoard.placeShip(0, 3, 3, "vertical");
+    gameBoard.placeShip(0, 4, 3, "vertical");
+    gameBoard.placeShip(0, 5, 4, "vertical");
+    gameBoard.placeShip(0, 6, 5, "vertical");
+
+    expect(gameBoard.allShipsSunk()).toBeFalsy();
+  });
+});
