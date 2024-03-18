@@ -84,12 +84,16 @@ export default function GameBoard() {
   function receiveAttack(row, col) {
     const target = board[row][col];
 
-    if (target !== null) {
-      target.hit();
+    if (target === null || (target !== null && target.hits < target.length)) {
+      if (target !== null) {
+        target.hit();
+      } else {
+        board[row][col] = ""; // CHANGE THIS ONCE THE UI IS READY
+        missedShots.push({ row, col });
+      }
       return true;
     } else {
-      board[row][col] = ""; //Update this once the UI is ready
-      missedShots.push({ row, col });
+      console.error("Cannot hit target: Cell has already been targeted");
       return false;
     }
   }
