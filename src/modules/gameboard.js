@@ -3,6 +3,7 @@ import Ship from "./ship";
 export default function GameBoard() {
   const board = [];
   const missedShots = [];
+  const allShots = [];
 
   function initializeBoard() {
     for (let i = 0; i < 10; i++) {
@@ -83,19 +84,18 @@ export default function GameBoard() {
 
   function receiveAttack(row, col) {
     const target = board[row][col];
+    allShots.push({ row, col });
 
-    if (target === null || (target !== null && target.hits < target.length)) {
-      if (target !== null) {
-        target.hit();
-      } else {
-        board[row][col] = ""; // CHANGE THIS ONCE THE UI IS READY
-        missedShots.push({ row, col });
-      }
-      return true;
+    if (target === null) {
+      board[row][col] = ""; // CHANGE THIS ONCE THE UI IS READY
+      missedShots.push({ row, col });
+    } else if (target.hits < target.length) {
+      target.hit();
     } else {
       console.error("Cannot hit target: Cell has already been targeted");
       return false;
     }
+    return true;
   }
   //console.log(missedShots);
 
@@ -107,16 +107,14 @@ export default function GameBoard() {
 
     // Initialize an object to track the sunk status of each ship length
     const sunkShips = Object.fromEntries(
-      shipLengths.map((length) => [length, true]),
+      shipLengths.map((length) => [length, false]),
     );
 
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
         const cell = board[i][j];
-        if (cell !== null && !cell.sunk) {
-          // If the cell contains a ship that is not sunk,
-          // mark the corresponding ship length as not sunk
-          sunkShips[cell.length] = false;
+        if (cell !== null && cell.sunk) {
+          sunkShips[cell.length] = true;
         }
       }
     }
@@ -133,5 +131,6 @@ export default function GameBoard() {
     allShipsSunk,
     placeShipRandom,
     missedShots,
+    allShots,
   };
 }
