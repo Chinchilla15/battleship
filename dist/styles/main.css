@@ -1,0 +1,43 @@
+:root {
+  --white-color: #f9f9f9;
+  --black-color: #1b1b1b;
+  --blue-retro: #2e2157;
+  --blue-sea: #3f72af;
+  --blue-normal: #023788;
+  --orange-normal: #fba834;
+  --purple-normal: #541388;
+  --purple-retro: #791e94;
+  --orange-retro: #ff6c11;
+  --fuczia-retro: #fd3777;
+  --pink-retro: #f706cf;
+  --red-retro: #fd1d53;
+  --yellow-retro: #f9c80e;
+  --lightblue-retro: #2de2e6;
+}
+/*
+body {
+}
+*/
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  font-family: "Honk", system-ui;
+  font-size: 100px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
