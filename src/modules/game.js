@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import Ship from "./ship";
 import GameBoard from "./gameboard";
 import Players from "./player";
@@ -15,19 +16,17 @@ export default function Game() {
 
   let activePlayer = playerOne.playersInfo[0];
 
-  const switchPlayer = () => {
-    activePlayer =
+  const switchPlayer = () =>
+    (activePlayer =
       activePlayer === playerOne.playersInfo[0]
         ? playerTwo.playersInfo[1]
-        : playerOne.playersInfo[0];
-  };
+        : playerOne.playersInfo[0]);
 
-  const restartPlayer = () => {
-    activePlayer =
+  const restartPlayer = () =>
+    (activePlayer =
       activePlayer === playerTwo.playersInfo[1]
         ? playerOne.playersInfo[0]
-        : playerOne.playersInfo[0];
-  };
+        : playerOne.playersInfo[0]);
 
   function initializeGame() {
     playerOneBoard.placeShip(8, 1, 5, "horizontal");
@@ -45,44 +44,20 @@ export default function Game() {
     renderBoards();
   }
 
-  function attackPlayerOneBoard() {
-    playerTwo.computerAttack();
+  function attackPlayerOneBoard(row, col) {
+    playerOneBoard.receiveAttack(row, col);
   }
 
   function attackPlayerTwoBoard(row, col) {
-    playerOne.playerAttack(row, col);
+    playerTwoBoard.receiveAttack(row, col);
   }
 
-  function handleAttack(row, col) {
-    const currentPlayer = playerOne.playersInfo[0].turn ? playerOne : playerTwo;
+  startGame();
 
-    console.log(currentPlayer.playersInfo[0].isAI);
-  }
   /*
-  function switchPlayer() {
-    playerOne.turn = !playerOne.turn;
-    playerTwo.turn = !playerTwo.turn;
-  }
-*/
-  attackPlayerTwoBoard(0, 1);
-  attackPlayerOneBoard();
-
-  playerTwoBoard.receiveAttack(0, 0);
-  playerOneBoard.receiveAttack(0, 0);
-  /*
-  // Example attacks to test functionality
-  attackPlayerOneBoard(0, 0);
-  attackPlayerOneBoard(0, 1);
-  attackPlayerOneBoard(0, 2);
-  attackPlayerOneBoard(1, 0);
-  attackPlayerOneBoard(2, 0);
-  attackPlayerTwoBoard(1, 1);
-  attackPlayerTwoBoard(5, 6);
-  attackPlayerTwoBoard(1, 0);
-*/
-
   console.log(playerOne.playersInfo[0].isAI);
+  console.log(playerTwo.playersInfo[1].isAI);
+*/
 
-  handleAttack();
   return { initializeGame, startGame, playerOneBoard, playerTwoBoard };
 }
