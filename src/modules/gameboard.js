@@ -33,14 +33,14 @@ export default function GameBoard() {
     for (let i = col; i < col + ship.length; i++) {
       board[row][i] = ship;
     }
-    //return true;
+    // return true;
   }
 
   function placeShipVertical(row, col, ship) {
     for (let i = row; i < row + ship.length; i++) {
       board[i][col] = ship;
     }
-    //return true;
+    // return true;
   }
 
   function placeShip(row, col, length, orientation) {
@@ -54,7 +54,7 @@ export default function GameBoard() {
 
     if (orientation === "horizontal") {
       placeShipHorizontal(row, col, ship);
-      //return true;
+      // return true;
     } else if (orientation === "vertical") {
       placeShipVertical(row, col, ship);
     }
@@ -87,21 +87,23 @@ export default function GameBoard() {
     allShots.push({ row, col });
 
     if (target === null) {
-      board[row][col] = ""; // CHANGE THIS ONCE THE UI IS READY
+      board[row][col] = false; // CHANGE THIS ONCE THE UI IS READY
       missedShots.push({ row, col });
-    } else if (target.hits < target.length) {
-      target.hit();
-    } else {
-      console.error("Cannot hit target: Cell has already been targeted");
       return false;
     }
-    return true;
+    if (target.hits < target.length) {
+      target.hit();
+      return true;
+    }
+    console.error("Cannot hit target: Cell has already been targeted");
+    return false;
   }
-  //console.log(missedShots);
+  // console.log(missedShots);
 
   const getBoard = () => board;
 
   function allShipsSunk() {
+    // eslint-disable-next-line no-shadow
     const board = getBoard();
     const shipLengths = [1, 1, 2, 3, 3, 4, 5];
 
