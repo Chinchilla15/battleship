@@ -6,58 +6,67 @@ import { Dom } from "./dom";
 
 export default function Game() {
   const playerOneBoard = GameBoard();
-  playerOneBoard.initializeBoard();
-
   const playerTwoBoard = GameBoard();
-  playerTwoBoard.initializeBoard();
 
   const playerOne = Players(playerTwoBoard);
   const playerTwo = Players(playerOneBoard);
 
-  let activePlayer = playerOne.playersInfo[0];
+  let activePlayerIndex = 0; // Start with player one
+  const players = [playerOne, playerTwo];
+  let activePlayer = players[activePlayerIndex].playersInfo[activePlayerIndex];
 
-  const switchPlayer = () =>
-    (activePlayer =
-      activePlayer === playerOne.playersInfo[0]
-        ? playerTwo.playersInfo[1]
-        : playerOne.playersInfo[0]);
+  function switchPlayer() {
+    activePlayerIndex = activePlayerIndex === 0 ? 1 : 0;
+    activePlayer =
+      !players[activePlayerIndex].playersInfo[activePlayerIndex].turn;
+  }
 
-  const restartPlayer = () =>
+  // If active player = true && player = playerOne make player attack
+
+  function restartPlayer() {
+    return (activePlayer = activePlayerIndex === 1 ? 0 : 0);
+  }
+  /*
+  const restart = () =>
     (activePlayer =
       activePlayer === playerTwo.playersInfo[1]
         ? playerOne.playersInfo[0]
         : playerOne.playersInfo[0]);
-
+*/
   function initializeGame() {
+    playerOneBoard.initializeBoard();
+    playerTwoBoard.initializeBoard();
+
     playerOneBoard.placeShip(8, 1, 5, "horizontal");
 
     playerTwoBoard.placeShip(2, 4, 5, "vertical");
   }
 
   function renderBoards() {
-    Dom.renderBoard(playerOneBoard, "player-one-container");
-    Dom.renderBoard(playerTwoBoard, "player-two-container");
+    Dom.renderBoard(playerOneBoard, "player-one-container", false);
+    Dom.renderBoard(playerTwoBoard, "player-two-container", true);
   }
 
   function startGame() {
     initializeGame();
     renderBoards();
   }
-
-  function attackPlayerOneBoard(row, col) {
-    playerOneBoard.receiveAttack(row, col);
+  /*
+  function attackPlayerOneBoard() {
+    playerTwo.computerAttack();
   }
 
   function attackPlayerTwoBoard(row, col) {
-    playerTwoBoard.receiveAttack(row, col);
+    playerOne.playerAttack(row, col);
   }
+*/
+  function playRound() {}
 
   startGame();
-
-  /*
-  console.log(playerOne.playersInfo[0].isAI);
-  console.log(playerTwo.playersInfo[1].isAI);
-*/
+  playerOneBoard.receiveAttack(0, 0);
+  playerTwo.computerAttack();
+  console.log(playerOneBoard.getBoard());
+  Dom.updatePlayerOneBoard(playerOneBoard, "player-one-container");
 
   return { initializeGame, startGame, playerOneBoard, playerTwoBoard };
 }
