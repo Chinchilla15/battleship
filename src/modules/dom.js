@@ -1,4 +1,4 @@
-const Dom = (function () {
+const Dom = (() => {
   function renderBoat(cell) {
     cell.classList.add("ship");
   }
@@ -11,37 +11,40 @@ const Dom = (function () {
     cell.classList.add("miss");
   }
 
-  function renderBoard(gameBoard, containerId) {
+  function updatePlayerOneBoard(gameBoard, containerId) {
     const container = document.getElementById(containerId);
-    container.innerHTML = "";
+    const cells = container.querySelectorAll(".cell");
 
-    const board = gameBoard.getBoard();
-
-    board.forEach((row, rowIndex) => {
+    gameBoard.getBoard().forEach((row, rowIndex) => {
       row.forEach((cell, colIndex) => {
-        const cellElement = document.createElement("div");
-        cellElement.className = "cell";
-        cellElement.dataset.row = rowIndex;
-        cellElement.dataset.col = colIndex;
+        // Find the corresponding cell element in the DOM
+        const cellElement = [...cells].find(
+          (element) =>
+            parseInt(element.dataset.row, 10) === rowIndex &&
+            parseInt(element.dataset.col, 10) === colIndex,
+        );
 
-        if (cell) renderBoat(cellElement);
+        // if (!cellElement) return; // Skip if no corresponding element is found
 
-        cellElement.addEventListener("click", () => {
-          const rowData = cellElement.dataset.row;
-          const colData = cellElement.dataset.col;
+        // Clear previous state classes to prevent visual bugs
+        //  cellElement.classList.remove("hit", "miss", "sunk");
 
-          gameBoard.receiveAttack(rowData, colData);
-          console.log(board);
-
-          updateBoard(gameBoard, containerId, rowData, colData);
-        });
-
-        container.appendChild(cellElement);
+        if (cell === false) {
+          showMiss(cellElement);
+        } else if (cell && typeof cell === "object") {
+          console.log(cell.hits);
+        }
+        // If the cell has a ship that hasn't been hit, it might not do anything visually here, depending on game rules about revealing ships
       });
     });
   }
 
-  function updateBoard(gameBoard, containerId, clickedRow, clickedCol) {
+  function updatePlayerTwoBoard(
+    gameBoard,
+    containerId,
+    clickedRow,
+    clickedCol,
+  ) {
     const container = document.getElementById(containerId);
     const cells = container.querySelectorAll(".cell");
     let shipSunk = null; // Variable to keep track if a ship has been sunk
@@ -59,6 +62,7 @@ const Dom = (function () {
         colIndex === clickedCol
       ) {
         showAttack(cell);
+
         if (cellData.isSunk()) {
           shipSunk = cellData; // Mark that a ship has been sunk
         }
@@ -79,15 +83,56 @@ const Dom = (function () {
     }
   }
 
+  // Function to handle the logic when a cell is clicked
+  function cellClickHandler(event, gameBoard, containerId) {
+    const cellElement = event.target;
+    const rowData = cellElement.dataset.row;
+    const colData = cellElement.dataset.col;
+
+    gameBoard.receiveAttack(rowData, colData);
+
+    updatePlayerTwoBoard(gameBoard, containerId, rowData, colData);
+
+    cellElement.removeEventListener("click", cellElement.clickHandler);
+  }
+
+  function renderBoard(gameBoard, containerId, isPlayerTwoBoard) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+
+    const board = gameBoard.getBoard();
+
+    board.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        const cellElement = document.createElement("div");
+        cellElement.className = "cell";
+        cellElement.dataset.row = rowIndex;
+        cellElement.dataset.col = colIndex;
+
+        if (cell) renderBoat(cellElement);
+
+        if (isPlayerTwoBoard) {
+          cellElement.addEventListener("click", (event) => {
+            cellClickHandler(event, gameBoard, containerId);
+          });
+        }
+
+        container.appendChild(cellElement);
+      });
+    });
+  }
+
   function disableBoard() {}
 
   function addShip() {}
 
   return {
     renderBoard,
-    updateBoard,
+    updatePlayerOneBoard,
+    updatePlayerTwoBoard,
     disableBoard,
     addShip,
+    cellClickHandler,
   };
 })();
 
