@@ -1,6 +1,6 @@
 export default function Players(gameBoard) {
-  let getAllShots = gameBoard.allShots;
-  let getMissedShots = gameBoard.missedShots;
+  const { allShots } = gameBoard;
+  const { missedShots } = gameBoard;
 
   const playersInfo = [
     {
@@ -18,14 +18,18 @@ export default function Players(gameBoard) {
   ];
 
   function computerAttack() {
-    let row, col;
+    let row;
+    let col;
 
     do {
       row = Math.floor(Math.random() * 10);
       col = Math.floor(Math.random() * 10);
-    } while (getAllShots.some((shot) => shot.row === row && shot.col === col)); // Ensure AI does not attack the same cell twice and within bounds
+      // eslint-disable-next-line no-loop-func
+    } while (allShots.some((shot) => shot.row === row && shot.col === col)); // Ensure AI does not attack the same cell twice and within bounds
 
     gameBoard.receiveAttack(row, col);
+    const coordinates = [row, col];
+    return { coordinates };
   }
 
   function playerAttack(row, col) {
