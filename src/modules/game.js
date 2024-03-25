@@ -51,11 +51,16 @@ export default function Game() {
     initializeGame();
     renderBoards();
   }
-  /*
-  function attackPlayerOneBoard() {
-    playerTwo.computerAttack();
-  }
 
+  function attackPlayerOneBoard() {
+    Dom.updatePlayerOneBoard(
+      playerOneBoard,
+      "player-one-container",
+      playerTwo.computerAttack().coordinates,
+    );
+    // console.log(playerOneBoard.getBoard());
+  }
+  /*
   function attackPlayerTwoBoard(row, col) {
     playerOne.playerAttack(row, col);
   }
@@ -63,10 +68,16 @@ export default function Game() {
   function playRound() {}
 
   startGame();
-  playerOneBoard.receiveAttack(0, 0);
-  playerTwo.computerAttack();
-  console.log(playerOneBoard.getBoard());
-  Dom.updatePlayerOneBoard(playerOneBoard, "player-one-container");
+  /* 
+Loop to test computer attacks 
+  for (let i = 0; i < 50; i++) {
+    Dom.updatePlayerOneBoard(
+      playerOneBoard,
+      "player-one-container",
+      playerTwo.computerAttack().coordinates,
+    );
+  }
+*/
 
   return { initializeGame, startGame, playerOneBoard, playerTwoBoard };
 }

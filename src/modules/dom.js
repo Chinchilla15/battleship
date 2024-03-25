@@ -11,32 +11,38 @@ const Dom = (() => {
     cell.classList.add("miss");
   }
 
-  function updatePlayerOneBoard(gameBoard, containerId) {
+  function updatePlayerOneBoard(gameBoard, containerId, coordinates) {
     const container = document.getElementById(containerId);
     const cells = container.querySelectorAll(".cell");
+    const row = coordinates[0];
+    const col = coordinates[1];
+    let shipSunk = null;
 
-    gameBoard.getBoard().forEach((row, rowIndex) => {
-      row.forEach((cell, colIndex) => {
-        // Find the corresponding cell element in the DOM
-        const cellElement = [...cells].find(
-          (element) =>
-            parseInt(element.dataset.row, 10) === rowIndex &&
-            parseInt(element.dataset.col, 10) === colIndex,
-        );
-
-        // if (!cellElement) return; // Skip if no corresponding element is found
-
-        // Clear previous state classes to prevent visual bugs
-        //  cellElement.classList.remove("hit", "miss", "sunk");
-
-        if (cell === false) {
-          showMiss(cellElement);
-        } else if (cell && typeof cell === "object") {
-          console.log(cell.hits);
+    cells.forEach((cell) => {
+      const rowIndex = Number(cell.dataset.row);
+      const colIndex = Number(cell.dataset.col);
+      const cellData = gameBoard.getBoard()[rowIndex][colIndex];
+      if (cellData === false) {
+        showMiss(cell);
+      } else if (cellData && rowIndex === row && colIndex === col) {
+        showAttack(cell);
+        if (cellData.isSunk()) {
+          shipSunk = cellData;
         }
-        // If the cell has a ship that hasn't been hit, it might not do anything visually here, depending on game rules about revealing ships
-      });
+      }
     });
+    // Find the sunk ship and add the sunk class
+    if (shipSunk !== null) {
+      cells.forEach((cell) => {
+        const rowIndex = cell.dataset.row;
+        const colIndex = cell.dataset.col;
+        const cellData = gameBoard.getBoard()[rowIndex][colIndex];
+
+        if (cellData === shipSunk) {
+          cell.classList.add("sunk");
+        }
+      });
+    }
   }
 
   function updatePlayerTwoBoard(
@@ -112,9 +118,10 @@ const Dom = (() => {
         if (cell) renderBoat(cellElement);
 
         if (isPlayerTwoBoard) {
-          cellElement.addEventListener("click", (event) => {
+          cellElement.clickHandler = (event) =>
             cellClickHandler(event, gameBoard, containerId);
-          });
+
+          cellElement.addEventListener("click", cellElement.clickHandler);
         }
 
         container.appendChild(cellElement);
