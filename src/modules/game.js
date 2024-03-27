@@ -12,27 +12,25 @@ export default function Game() {
   const playerTwo = Players(playerOneBoard);
 
   let activePlayerIndex = 0; // Start with player one
+
   const players = [playerOne, playerTwo];
   let activePlayer = players[activePlayerIndex].playersInfo[activePlayerIndex];
 
+  const playerWon =
+    players[activePlayerIndex].playersInfo[activePlayerIndex].win;
+
   function switchPlayer() {
     activePlayerIndex = activePlayerIndex === 0 ? 1 : 0;
-    activePlayer =
-      !players[activePlayerIndex].playersInfo[activePlayerIndex].turn;
+    activePlayer = players[activePlayerIndex].playersInfo[activePlayerIndex];
+  }
+
+  function restartPlayer() {
+    activePlayerIndex = activePlayerIndex === 1 ? 0 : 0;
+    activePlayer = players[activePlayerIndex].playersInfo[activePlayerIndex];
   }
 
   // If active player = true && player = playerOne make player attack
 
-  function restartPlayer() {
-    return (activePlayer = activePlayerIndex === 1 ? 0 : 0);
-  }
-  /*
-  const restart = () =>
-    (activePlayer =
-      activePlayer === playerTwo.playersInfo[1]
-        ? playerOne.playersInfo[0]
-        : playerOne.playersInfo[0]);
-*/
   function initializeGame() {
     playerOneBoard.initializeBoard();
     playerTwoBoard.initializeBoard();
