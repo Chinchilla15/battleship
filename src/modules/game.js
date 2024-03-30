@@ -1,23 +1,23 @@
-/* eslint-disable no-return-assign */
+/* eslint-disable import/no-cycle */
 import Ship from "./ship";
 import GameBoard from "./gameboard";
 import Players from "./player";
 import { Dom } from "./dom";
 
 export default function Game() {
+  const p2Board = document.getElementById("player-two-container");
+
   const playerOneBoard = GameBoard();
   const playerTwoBoard = GameBoard();
 
   const playerOne = Players(playerTwoBoard);
   const playerTwo = Players(playerOneBoard);
 
+  const players = [playerOne, playerTwo];
+
   let activePlayerIndex = 0; // Start with player one
 
-  const players = [playerOne, playerTwo];
   let activePlayer = players[activePlayerIndex].playersInfo[activePlayerIndex];
-
-  const playerWon =
-    players[activePlayerIndex].playersInfo[activePlayerIndex].win;
 
   function switchPlayer() {
     activePlayerIndex = activePlayerIndex === 0 ? 1 : 0;
@@ -35,19 +35,14 @@ export default function Game() {
     playerOneBoard.initializeBoard();
     playerTwoBoard.initializeBoard();
 
-    playerOneBoard.placeShip(8, 1, 5, "horizontal");
+    playerOneBoard.placeShipRandom();
 
-    playerTwoBoard.placeShip(2, 4, 5, "vertical");
+    playerTwoBoard.placeShipRandom();
   }
 
   function renderBoards() {
     Dom.renderBoard(playerOneBoard, "player-one-container", false);
     Dom.renderBoard(playerTwoBoard, "player-two-container", true);
-  }
-
-  function startGame() {
-    initializeGame();
-    renderBoards();
   }
 
   function attackPlayerOneBoard() {
@@ -56,26 +51,68 @@ export default function Game() {
       "player-one-container",
       playerTwo.computerAttack().coordinates,
     );
-    // console.log(playerOneBoard.getBoard());
   }
-  /*
-  function attackPlayerTwoBoard(row, col) {
-    playerOne.playerAttack(row, col);
-  }
-*/
-  function playRound() {}
 
-  startGame();
-  /* 
-Loop to test computer attacks 
-  for (let i = 0; i < 50; i++) {
-    Dom.updatePlayerOneBoard(
-      playerOneBoard,
-      "player-one-container",
-      playerTwo.computerAttack().coordinates,
-    );
+  function playRound() {
+    if (activePlayer.isAI === false) {
+      switchPlayer();
+    }
+    if (playerOneBoard.allShipsSunk()) {
+      playerTwo.playersInfo[0].win = true;
+    }
+    if (playerTwoBoard.allShipsSunk()) {
+      playerOne.playersInfo[0].win = true;
+    }
   }
-*/
 
-  return { initializeGame, startGame, playerOneBoard, playerTwoBoard };
+  function playGame() {
+    //  playRound();
+    while (
+      activePlayer.isAI === true &&
+      !playerOne.playersInfo[0].win &&
+      !playerTwo.playersInfo[0].win
+    ) {
+      setTimeout(() => {
+        try {
+          attackPlayerOneBoard();
+        } catch (err) {
+          console.log(err);
+        }
+      }, 0);
+
+      switchPlayer();
+      if (playerOneBoard.allShipsSunk()) {
+        playerTwo.playersInfo[0].win = true;
+        console.log("game over");
+      }
+      if (playerTwoBoard.allShipsSunk()) {
+        playerOne.playersInfo[0].win = true;
+        console.log("game over");
+      }
+    }
+  }
+
+  function startGame() {
+    initializeGame();
+    renderBoards();
+    // playGame();
+  }
+
+  // startGame();
+
+  p2Board.addEventListener("click", () => {
+    switchPlayer();
+    playGame();
+  });
+
+  return {
+    initializeGame,
+    startGame,
+    playerOneBoard,
+    playerTwoBoard,
+    switchPlayer,
+    activePlayer,
+    playRound,
+    playGame,
+  };
 }
