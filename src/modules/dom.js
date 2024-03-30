@@ -1,3 +1,8 @@
+/* eslint-disable import/no-cycle */
+import Game from "./game";
+
+const game = Game();
+
 const Dom = (() => {
   function renderBoat(cell) {
     cell.classList.add("ship");
@@ -55,9 +60,11 @@ const Dom = (() => {
     const cells = container.querySelectorAll(".cell");
     let shipSunk = null; // Variable to keep track if a ship has been sunk
 
+    // console.log(gameBoard.allShipsSunk());
+
     cells.forEach((cell) => {
-      const rowIndex = cell.dataset.row;
-      const colIndex = cell.dataset.col;
+      const rowIndex = Number(cell.dataset.row);
+      const colIndex = Number(cell.dataset.col);
       const cellData = gameBoard.getBoard()[rowIndex][colIndex];
 
       if (cellData === false) {
@@ -92,14 +99,15 @@ const Dom = (() => {
   // Function to handle the logic when a cell is clicked
   function cellClickHandler(event, gameBoard, containerId) {
     const cellElement = event.target;
-    const rowData = cellElement.dataset.row;
-    const colData = cellElement.dataset.col;
+    const rowData = Number(cellElement.dataset.row);
+    const colData = Number(cellElement.dataset.col);
 
     gameBoard.receiveAttack(rowData, colData);
 
     updatePlayerTwoBoard(gameBoard, containerId, rowData, colData);
 
     cellElement.removeEventListener("click", cellElement.clickHandler);
+    game.switchPlayer();
   }
 
   function renderBoard(gameBoard, containerId, isPlayerTwoBoard) {
