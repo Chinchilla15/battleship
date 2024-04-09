@@ -29,14 +29,10 @@ export default function Game() {
     activePlayer = players[activePlayerIndex].playersInfo[activePlayerIndex];
   }
 
-  // If active player = true && player = playerOne make player attack
-
   function initializeGame() {
     playerOneBoard.initializeBoard();
     playerTwoBoard.initializeBoard();
-
     playerOneBoard.placeShipRandom();
-
     playerTwoBoard.placeShipRandom();
   }
 
@@ -46,13 +42,15 @@ export default function Game() {
   }
 
   function attackPlayerOneBoard() {
+    const attackCoordinates = playerTwo.computerAttack().coordinates;
+    console.log(attackCoordinates);
     Dom.updatePlayerOneBoard(
       playerOneBoard,
       "player-one-container",
-      playerTwo.computerAttack().coordinates,
+      attackCoordinates,
     );
   }
-
+  /*
   function playRound() {
     if (activePlayer.isAI === false) {
       switchPlayer();
@@ -64,9 +62,9 @@ export default function Game() {
       playerOne.playersInfo[0].win = true;
     }
   }
-
+*/
   function playGame() {
-    //  playRound();
+    console.log(activePlayer);
     while (
       activePlayer.isAI === true &&
       !playerOne.playersInfo[0].win &&
@@ -95,13 +93,10 @@ export default function Game() {
   function startGame() {
     initializeGame();
     renderBoards();
-    // playGame();
   }
 
-  // startGame();
-
   p2Board.addEventListener("click", () => {
-    switchPlayer();
+    switchPlayer(); // SWITCH
     playGame();
   });
 
@@ -112,7 +107,6 @@ export default function Game() {
     playerTwoBoard,
     switchPlayer,
     activePlayer,
-    playRound,
     playGame,
   };
 }
