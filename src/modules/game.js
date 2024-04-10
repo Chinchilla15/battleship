@@ -6,6 +6,8 @@ import { Dom } from "./dom";
 
 export default function Game() {
   const p2Board = document.getElementById("player-two-container");
+  const randomBtn = document.getElementById("random-btn");
+  const playGameBtn = document.getElementById("play-game-btn");
 
   const playerOneBoard = GameBoard();
   const playerTwoBoard = GameBoard();
@@ -32,8 +34,7 @@ export default function Game() {
   function initializeGame() {
     playerOneBoard.initializeBoard();
     playerTwoBoard.initializeBoard();
-    playerOneBoard.placeShipRandom();
-    playerTwoBoard.placeShipRandom();
+    // playerTwoBoard.placeShipRandom();
   }
 
   function renderBoards() {
@@ -43,7 +44,7 @@ export default function Game() {
 
   function attackPlayerOneBoard() {
     const attackCoordinates = playerTwo.computerAttack().coordinates;
-    console.log(attackCoordinates);
+    // console.log(attackCoordinates);
     Dom.updatePlayerOneBoard(
       playerOneBoard,
       "player-one-container",
@@ -64,7 +65,7 @@ export default function Game() {
   }
 */
   function playGame() {
-    console.log(activePlayer);
+    // console.log(activePlayer);
     while (
       activePlayer.isAI === true &&
       !playerOne.playersInfo[0].win &&
@@ -93,11 +94,29 @@ export default function Game() {
   function startGame() {
     initializeGame();
     renderBoards();
+    p2Board.style.pointerEvents = "none";
+    playGameBtn.disabled = true;
+    playGameBtn.style.pointerEvents = "none";
+    playGame();
   }
-
+  /*
   p2Board.addEventListener("click", () => {
     switchPlayer(); // SWITCH
     playGame();
+  });
+*/
+  randomBtn.addEventListener("click", () => {
+    playerOneBoard.placeShipRandom();
+    Dom.renderBoard(playerOneBoard, "player-one-container", false);
+    playGameBtn.style.pointerEvents = "auto";
+    playGameBtn.disabled = false;
+  });
+
+  playGameBtn.addEventListener("click", () => {
+    playerTwoBoard.placeShipRandom();
+    p2Board.style.pointerEvents = "auto";
+    randomBtn.style.display = "none";
+    playGameBtn.style.display = "none";
   });
 
   return {
@@ -108,5 +127,7 @@ export default function Game() {
     switchPlayer,
     activePlayer,
     playGame,
+    attackPlayerOneBoard,
+    renderBoards,
   };
 }
