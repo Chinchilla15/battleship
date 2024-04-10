@@ -5,7 +5,9 @@ import Players from "./player";
 import { Dom } from "./dom";
 
 export default function Game() {
+  const winnerMessage = document.getElementById("winner");
   const p2Board = document.getElementById("player-two-container");
+  const p2Container = document.getElementById("p2-container");
   const randomBtn = document.getElementById("random-btn");
   const playGameBtn = document.getElementById("play-game-btn");
 
@@ -51,25 +53,12 @@ export default function Game() {
       attackCoordinates,
     );
   }
-  /*
-  function playRound() {
-    if (activePlayer.isAI === false) {
-      switchPlayer();
-    }
-    if (playerOneBoard.allShipsSunk()) {
-      playerTwo.playersInfo[0].win = true;
-    }
-    if (playerTwoBoard.allShipsSunk()) {
-      playerOne.playersInfo[0].win = true;
-    }
-  }
-*/
+
   function playGame() {
-    // console.log(activePlayer);
     while (
       activePlayer.isAI === true &&
       !playerOne.playersInfo[0].win &&
-      !playerTwo.playersInfo[0].win
+      !playerTwo.playersInfo[1].win
     ) {
       setTimeout(() => {
         try {
@@ -77,16 +66,21 @@ export default function Game() {
         } catch (err) {
           console.log(err);
         }
-      }, 0);
+      }, 500);
 
       switchPlayer();
+
       if (playerOneBoard.allShipsSunk()) {
-        playerTwo.playersInfo[0].win = true;
-        console.log("game over");
+        playerTwo.playersInfo[1].win = true;
+        console.log("Game Over, Player Two wins!");
+        winnerMessage.innerHTML = `${playerTwo.playersInfo[1].name} wins!`;
+        p2Board.style.pointerEvents = "none";
       }
       if (playerTwoBoard.allShipsSunk()) {
         playerOne.playersInfo[0].win = true;
-        console.log("game over");
+        p2Board.style.pointerEvents = "none";
+        winnerMessage.innerHTML = `${playerOne.playersInfo[0].name} wins!`;
+        console.log("Game Over, Player One Wins!");
       }
     }
   }
@@ -94,17 +88,16 @@ export default function Game() {
   function startGame() {
     initializeGame();
     renderBoards();
-    p2Board.style.pointerEvents = "none";
+    p2Container.style.display = "none";
     playGameBtn.disabled = true;
     playGameBtn.style.pointerEvents = "none";
-    playGame();
   }
-  /*
+
   p2Board.addEventListener("click", () => {
     switchPlayer(); // SWITCH
     playGame();
   });
-*/
+
   randomBtn.addEventListener("click", () => {
     playerOneBoard.placeShipRandom();
     Dom.renderBoard(playerOneBoard, "player-one-container", false);
@@ -114,7 +107,7 @@ export default function Game() {
 
   playGameBtn.addEventListener("click", () => {
     playerTwoBoard.placeShipRandom();
-    p2Board.style.pointerEvents = "auto";
+    p2Container.style.display = "flex";
     randomBtn.style.display = "none";
     playGameBtn.style.display = "none";
   });
