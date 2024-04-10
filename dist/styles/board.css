@@ -1,5 +1,23 @@
 @import url(main.css);
 
+#winner {
+  font-size: 36px;
+  color: var(--fuchsia-retro);
+}
+
+#p1-container,
+#p2-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+h3 {
+  margin-bottom: 20px;
+  font-size: 30px;
+}
+
 #boards-container {
   display: flex;
   align-items: center;
@@ -13,7 +31,7 @@
 #player-two-container {
   display: grid;
   height: 30rem;
-  min-width: 30rem;
+  width: 30rem;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
   border: 1px solid black;
@@ -51,7 +69,7 @@
   #boards-container {
     flex-direction: column;
     align-items: center;
-    height: 70vh;
+    height: 50vh;
   }
 
   #player-one-container,
