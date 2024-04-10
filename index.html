@@ -13,6 +13,10 @@
       href="https://fonts.googleapis.com/css2?family=Honk&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tilt+Neon&display=swap"
+      rel="stylesheet"
+    />
     <script
       src="https://kit.fontawesome.com/aa73f4cdd9.js"
       crossorigin="anonymous"
@@ -20,14 +24,26 @@
   </head>
   <body>
     <header><h1>Battleship!</h1></header>
+
     <main>
+      <p id="winner"></p>
       <div id="boards-container">
-        <div id="player-one-container"></div>
-        <div id="player-two-container"></div>
+        <div id="p1-container">
+          <h3 id="p1-title">Your Board</h3>
+          <div id="player-one-container"></div>
+        </div>
+        <div id="p2-container">
+          <h3 id="p2-title">Player Two Board</h3>
+          <div id="player-two-container"></div>
+        </div>
       </div>
       <div id="buttons-container">
-        <button id="random-btn">Raondom Placement</button>
-        <button id="play-game-btn">Play Game</button>
+        <button id="random-btn">
+          <i class="fa-solid fa-shuffle fa-2xl" title="Shuffle Placement"></i>
+        </button>
+        <button id="play-game-btn">
+          <i class="fa-solid fa-gamepad fa-2xl" title="Play Game"></i>
+        </button>
       </div>
     </main>
     <footer></footer>

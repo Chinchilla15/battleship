@@ -14,10 +14,14 @@
   --yellow-retro: #f9c80e;
   --lightblue-retro: #2de2e6;
 }
-/*
+
 body {
+  font-family: "Pixelify Sans", sans-serif;
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
 }
-*/
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -43,16 +47,21 @@ main {
   justify-content: center;
 }
 
+#winner {
+  margin: 0;
+  padding: 0;
+}
+
 #buttons-container {
-  width: 60%;
+  width: 40%;
   justify-content: space-evenly;
 }
 
 #buttons-container > button {
   border: none;
-  width: 100px;
-  height: 50px;
-  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  border-radius: 20px;
   cursor: pointer;
   transition: transform 0.2s;
 }
