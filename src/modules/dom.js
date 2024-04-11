@@ -1,8 +1,3 @@
-/* eslint-disable import/no-cycle */
-import Game from "./game";
-
-const game = Game();
-
 const Dom = (() => {
   function renderBoat(cell) {
     cell.classList.add("ship");
@@ -19,8 +14,8 @@ const Dom = (() => {
   function updatePlayerOneBoard(gameBoard, containerId, coordinates) {
     const container = document.getElementById(containerId);
     const cells = container.querySelectorAll(".cell");
-    const row = coordinates[0];
-    const col = coordinates[1];
+    const { row } = coordinates;
+    const { col } = coordinates;
     let shipSunk = null;
 
     cells.forEach((cell) => {
@@ -107,7 +102,6 @@ const Dom = (() => {
     updatePlayerTwoBoard(gameBoard, containerId, rowData, colData);
 
     cellElement.removeEventListener("click", cellElement.clickHandler);
-    game.switchPlayer();
   }
 
   function renderBoard(gameBoard, containerId, isPlayerTwoBoard) {
@@ -137,17 +131,13 @@ const Dom = (() => {
     });
   }
 
-  function disableBoard() {}
-
   function addShip() {}
 
   return {
     renderBoard,
     updatePlayerOneBoard,
     updatePlayerTwoBoard,
-    disableBoard,
     addShip,
-    cellClickHandler,
   };
 })();
 
