@@ -4,6 +4,7 @@ const Dom = (() => {
   }
 
   function showAttack(cell) {
+    cell.classList.remove("ship");
     cell.classList.add("hit");
   }
 
@@ -39,6 +40,7 @@ const Dom = (() => {
         const cellData = gameBoard.getBoard()[rowIndex][colIndex];
 
         if (cellData === shipSunk) {
+          cell.classList.remove("hit");
           cell.classList.add("sunk");
         }
       });
@@ -54,8 +56,6 @@ const Dom = (() => {
     const container = document.getElementById(containerId);
     const cells = container.querySelectorAll(".cell");
     let shipSunk = null; // Variable to keep track if a ship has been sunk
-
-    // console.log(gameBoard.allShipsSunk());
 
     cells.forEach((cell) => {
       const rowIndex = Number(cell.dataset.row);
@@ -85,6 +85,7 @@ const Dom = (() => {
         const cellData = gameBoard.getBoard()[rowIndex][colIndex];
 
         if (cellData === shipSunk) {
+          cell.classList.remove("hit");
           cell.classList.add("sunk");
         }
       });
@@ -131,13 +132,10 @@ const Dom = (() => {
     });
   }
 
-  function addShip() {}
-
   return {
     renderBoard,
     updatePlayerOneBoard,
     updatePlayerTwoBoard,
-    addShip,
   };
 })();
 
