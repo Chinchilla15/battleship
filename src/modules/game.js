@@ -1,15 +1,14 @@
-/* eslint-disable import/no-cycle */
-import Ship from "./ship";
 import GameBoard from "./gameboard";
 import Players from "./player";
 import { Dom } from "./dom";
 
 export default function Game() {
-  const winnerMessage = document.getElementById("winner");
   const p2Board = document.getElementById("player-two-container");
   const p2Container = document.getElementById("p2-container");
   const randomBtn = document.getElementById("random-btn");
   const playGameBtn = document.getElementById("play-game-btn");
+  const playAgainBtn = document.createElement("button");
+  const winnerMessage = document.getElementById("winner");
 
   const playerOneBoard = GameBoard();
   const playerTwoBoard = GameBoard();
@@ -36,7 +35,6 @@ export default function Game() {
   function initializeGame() {
     playerOneBoard.initializeBoard();
     playerTwoBoard.initializeBoard();
-    // playerTwoBoard.placeShipRandom();
   }
 
   function renderBoards() {
@@ -46,12 +44,20 @@ export default function Game() {
 
   function attackPlayerOneBoard() {
     const attackCoordinates = playerTwo.computerAttack().coordinates;
-    // console.log(attackCoordinates);
     Dom.updatePlayerOneBoard(
       playerOneBoard,
       "player-one-container",
       attackCoordinates,
     );
+  }
+
+  function addPlayAgainBtn() {
+    const btnsContainer = document.getElementById("buttons-container");
+
+    playAgainBtn.style.display = "block";
+    playAgainBtn.setAttribute("title", "Play Again");
+    playAgainBtn.innerHTML = "<i class=\"fa-solid fa-repeat fa-2xl \"></i>";
+    btnsContainer.appendChild(playAgainBtn);
   }
 
   function playGame() {
@@ -66,21 +72,23 @@ export default function Game() {
         } catch (err) {
           console.log(err);
         }
-      }, 500);
+      }, 0);
 
       switchPlayer();
 
       if (playerOneBoard.allShipsSunk()) {
         playerTwo.playersInfo[1].win = true;
-        console.log("Game Over, Player Two wins!");
         winnerMessage.innerHTML = `${playerTwo.playersInfo[1].name} wins!`;
         p2Board.style.pointerEvents = "none";
+
+        addPlayAgainBtn();
       }
       if (playerTwoBoard.allShipsSunk()) {
         playerOne.playersInfo[0].win = true;
         p2Board.style.pointerEvents = "none";
         winnerMessage.innerHTML = `${playerOne.playersInfo[0].name} wins!`;
-        console.log("Game Over, Player One Wins!");
+
+        addPlayAgainBtn();
       }
     }
   }
@@ -93,34 +101,53 @@ export default function Game() {
     playGameBtn.style.pointerEvents = "none";
   }
 
-  p2Board.addEventListener("click", () => {
-    switchPlayer(); // SWITCH
+  function handlePlayerTwoBoardClick() {
+    switchPlayer();
     playGame();
-  });
+  }
 
   randomBtn.addEventListener("click", () => {
     playerOneBoard.placeShipRandom();
     Dom.renderBoard(playerOneBoard, "player-one-container", false);
+
     playGameBtn.style.pointerEvents = "auto";
     playGameBtn.disabled = false;
   });
 
   playGameBtn.addEventListener("click", () => {
+    // playGame();
+
     playerTwoBoard.placeShipRandom();
     p2Container.style.display = "flex";
+
     randomBtn.style.display = "none";
     playGameBtn.style.display = "none";
+    playAgainBtn.style.display = "none";
+
+    p2Board.style.pointerEvents = "auto";
+    winnerMessage.innerHTML = "";
+
+    p2Board.addEventListener("click", handlePlayerTwoBoardClick);
+  });
+
+  playAgainBtn.addEventListener("click", () => {
+    playerOne.playersInfo[0].win = false;
+    playerTwo.playersInfo[1].win = false;
+
+    restartPlayer();
+    startGame();
+
+    randomBtn.style.display = "block";
+    playGameBtn.style.display = "block";
+    playAgainBtn.style.display = "none";
+
+    winnerMessage.innerHTML = "";
+
+    p2Board.removeEventListener("click", handlePlayerTwoBoardClick);
   });
 
   return {
-    initializeGame,
     startGame,
-    playerOneBoard,
-    playerTwoBoard,
-    switchPlayer,
-    activePlayer,
     playGame,
-    attackPlayerOneBoard,
-    renderBoards,
   };
 }
