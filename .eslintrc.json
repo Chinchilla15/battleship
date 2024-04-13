@@ -14,7 +14,9 @@
     "semi": ["error", "always"],
     "quotes": ["error", "double"],
     "no-unused-vars": "warn",
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "import/prefer-default-export": "warn",
+    "prefer-const": "off"
   },
   "overrides": [
     {
@@ -22,7 +24,7 @@
       "plugins": ["jest"],
       "env": {
         "node": true,
-        "jest/globals": true
+        "jest": true
       }
     }
   ],
