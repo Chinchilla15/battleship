@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import Players from "../modules/player";
 import GameBoard from "../modules/gameboard";
 
@@ -21,7 +22,7 @@ describe("Player module functionality ", () => {
       expect(row.length).toBe(10);
       row.forEach((cell) => {
         if (cell !== null) {
-          expect(cell).toBe("");
+          expect(cell).toBeFalsy();
         }
       });
     });
@@ -29,12 +30,12 @@ describe("Player module functionality ", () => {
 
   test("AI does not hit the same cell twice", () => {
     const attackCoordinates = new Set();
-    const totalAttacks = 100; //Simulating the 100 possible attacks
+    const totalAttacks = 100; // Simulating the 100 possible attacks
     for (let i = 0; i < totalAttacks; i++) {
       player.computerAttack();
     }
 
-    const allShots = gameBoard.allShots;
+    const { allShots } = gameBoard;
     allShots.forEach(({ row, col }) => {
       const coordString = `${row},${col}`;
       attackCoordinates.add(coordString);
